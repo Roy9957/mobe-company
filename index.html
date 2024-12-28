@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #FF5722;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="email"], input[type="tel"], input[type="address"], select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="address"]:focus, select:focus {
+            border-color: #FF5722;
+            outline: none;
+        }
+.checkbox-container {
+    text-align: left;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center; /* Aligns checkbox and label in the center */
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    border: 2px solid #FF5722;
+    position: relative;
+    appearance: none;
+    margin-right: 10px;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+    background-color: #FF5722;
+    border-color: #FF5722;
+}
+
+.checkbox-container input[type="checkbox"]:checked::after {
+    content: '✔';
+    left: 5px;
+    color: white;
+    font-size: 12px;
+}
+
+.checkbox-container label {
+    font-size: 12px;
+    color: #333333;
+    font-weight: bold;
+    display: inline-block;
+}
+      
+
+        .submit-btn {
+            background-color: #FF5722;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .submit-btn:hover {
+            background-color: #E64A19;
+        }
+
+        .form-error {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .user-id {
+            margin-top: 20px;
+            color: #4CAF50;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .social-icons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .social-icons i {
+            font-size: 25px;
+            color: #FF5722;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .social-icons i:hover {
+            color: #E64A19;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo">
+        <img src="https://assets.onecompiler.app/42swzbgaa/433g7msea/1000049145.png" alt="Logo">
+    </div>
+    <h2>MOBE COMPANY JOIN</h2>
+    <form id="userDetailsForm">
+        <input type="text" id="name" placeholder="Enter Your Name" required>
+        <input type="email" id="email" placeholder="Enter Your Email" required>
+        <input type="tel" id="phone" placeholder="Enter Your Phone Number" required>
+        <input type="text" id="address" placeholder="Enter Your Address" required>
+        <select id="country" required>
+            <option value="">Select Your Country</option>
+            <option value="Bangladesh">Bangladesh</option>
+            <option value="India">India</option>
+            <option value="USA">USA</option>
+            <option value="UK">UK</option>
+        </select>
+
+        <div class="checkbox-container">
+            <input type="checkbox" id="question1" required>
+            <label for="question1">Are you sure you want to join our company?</label><br>
+
+            <input type="checkbox" id="question2" required>
+            <label for="question2">I agree to follow all rules.</label><br>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit</button>
+        <p class="form-error" id="errorMessage"></p>
+        <p class="user-id" id="userIdDisplay"></p>
+    </form>
+
+  
+</div>
+
+<script type="module">
+    // Firebase setup
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+    
+    const firebaseConfig = {
+        apiKey: "AIzaSyBkOBdxwi9ytbqcGfYgbHE-g7433tjcFgE",
+        authDomain: "login-51a27.firebaseapp.com",
+        databaseURL: "https://login-51a27-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "login-51a27",
+        storageBucket: "login-51a27.firebasestorage.app",
+        messagingSenderId: "539367854608",
+        appId: "1:539367854608:web:815f627814777d49d07095",
+        measurementId: "G-0XFJDSSM4F"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Function to generate a random user ID
+    function generateRandomId() {
+        return 'user_' + Math.floor(Math.random() * 1000000);
+    }
+
+    // Form submission handler
+    document.getElementById("userDetailsForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const address = document.getElementById("address").value;
+        const country = document.getElementById("country").value;
+        const question1 = document.getElementById("question1").checked;
+        const question2 = document.getElementById("question2").checked;
+
+        if (name && email && phone && address && country && question1 && question2) {
+            const userId = generateRandomId();  // Generate a random user ID
+            document.getElementById("userIdDisplay").textContent = `Your User ID is: ${userId}`;  // Display User ID
+
+            // Save data to Firebase
+            set(ref(db, 'users/' + userId), {
+                userId,
+                name,
+                email,
+                phone,
+                address,
+                country,
+                question1,
+                question2
+            }).then(() => {
+                // Redirect to details page with userId as a query parameter
+                window.location.href = `details.html?userId=${userId}`;
+            }).catch((error) => {
+                document.getElementById("errorMessage").textContent = "Error: " + error.message;
+            });
+        } else {
+            document.getElementById("errorMessage").textContent = "Please fill in all fields and agree to the terms.";
+        }
+    });
+</script>
+
+</body>
+</html>
